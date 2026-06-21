@@ -51,6 +51,11 @@ class Gestor_usuarios:
   
     
     def agregar_usuario(self, usuario):
+        
+        
+        if self.usuario_existe(usuario.usuario,usuario.dni,usuario.email):
+            
+            return False
         con = sqlite3.connect(Base_Nombre)
         cursor = con.cursor()
         cursor.execute(
@@ -59,6 +64,8 @@ class Gestor_usuarios:
         )
         con.commit()
         con.close()
+
+
     def eliminar_usuario(self, usuario):
         con = sqlite3.connect("bibloteca.db")
         cursor = con.cursor()
@@ -85,6 +92,21 @@ class Gestor_usuarios:
             return None
     def mostrar_usuario(self):
         pass
+    def usuario_existe(self, usuario, dni, email):
+        con = sqlite3.connect(Base_Nombre)
+        cursor = con.cursor()
+
+        cursor.execute(
+            """
+            SELECT * FROM tabla_usuarios
+            WHERE usuario = ? OR dni = ? OR email = ?
+            """,
+            (usuario, dni, email)
+        )
+
+        resultado = cursor.fetchone()
+        con.close()
+        return resultado is not None
     def verificar_usuario(self,usuario,contraseña):
         con = sqlite3.connect(Base_Nombre)
         cursor = con.cursor()
@@ -162,16 +184,3 @@ DB.crear_tabla("tabla_prestamos",
     "fecha_devolucion DATE NOT NULL, " \
     "FOREIGN KEY (id_usuario) REFERENCES tabla_usuarios(id_usuario), " \
     "FOREIGN KEY (id_libro) REFERENCES tabla_libros(id_libro)")
-
-libro1 = Libro(
-    titulo="Cien años de soledad", 
-    autor="Gabriel García Márquez", 
-    genero="Realismo Mágico", 
-    isbn="978-3-16-148410-0", 
-    anio=1967, 
-    paginas=417, 
-    stock=5, 
-)
-
-libros = Gestor_Libros()
-libros.agregar_libro(libro1)

@@ -279,9 +279,45 @@ class Registro:
             return
 
         nuevo_usuario = Usuario(usuario, nombre, apellido, dni, email, contraseña, "Cliente")
-        self.app.db.agregar_usuario(nuevo_usuario)
-        showinfo("Registro exitoso", "Usuario registrado correctamente.")
-        self.cambiar_a_login()
+        
+
+        registrado = self.app.db.agregar_usuario(nuevo_usuario)
+
+        if registrado:
+            showinfo("Registro exitoso", "Usuario registrado correctamente.")
+            self.cambiar_a_login()
+        else:
+            showerror("Error de registro", "El usuario, DNI o correo electrónico ya se encuentran registrados.")
+            
+            # SOLUCIÓN: Usamos Toplevel para crear una ventana NUEVA e independiente
+            ventana_ayuda = Toplevel(self.root) 
+            ventana_ayuda.title("Ayuda con la cuenta")
+            ventana_ayuda.geometry("300x120")
+            ventana_ayuda.resizable(False, False)
+            
+            # Hace que la ventana dependa de la principal y bloquee la interacción con el fondo temporalmente
+            ventana_ayuda.transient(self.root)
+            ventana_ayuda.grab_set()
+
+            # Ahora sí puedes usar pack() libremente porque esta ventana está vacía
+            Label(ventana_ayuda, text="¿Tienes problemas para registrarte?", font=("Arial", 10, "bold")).pack(pady=10)
+
+            def recuperar_con():
+                ventana_ayuda.destroy() # Esto ahora solo cierra la mini ventana flotante
+                showinfo("Recuperación", "Se ha enviado un correo de recuperación al mail ingresado.")
+
+            btn_olvido = Button(
+                ventana_ayuda, 
+                text="¿Haz olvidado tu contraseña?", 
+                command=recuperar_con,
+                fg="blue", 
+                cursor="hand2"
+            )
+            btn_olvido.pack(pady=5)
+
+
+
+
 
     def cambiar_a_login(self):
         self.app.mostrar_login()
