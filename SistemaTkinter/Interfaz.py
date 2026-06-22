@@ -2,7 +2,8 @@ from tkinter import *
 import tkinter as tk
 from tkinter import ttk 
 from tkinter.messagebox import *
-import DB as DB 
+import DB as DB
+from DB import *
 from usuario import Usuario
 import sqlite3
 
@@ -29,6 +30,7 @@ class Main:
         self.crear_menu()
         self.crear_widgets()
         self.mostrar_libros()   
+        self.mostrar_prestamos()
     def mostrar_info(self):
         showinfo("Biblioteca", "Sistema de gestión de biblioteca")
 
@@ -52,22 +54,23 @@ class Main:
         main_frame = Frame(self.root, bg=self.bg_color)
         main_frame.pack(fill="both", expand=True, padx=50, pady=(15, 15))
 
-        main_frame.grid_rowconfigure(2, weight=1)  # la tabla se expande
-        main_frame.grid_columnconfigure(0, weight=1)
+        main_frame.grid_rowconfigure(2, weight=1)      
+        main_frame.grid_columnconfigure(0, weight=1)   
+        main_frame.grid_columnconfigure(1, weight=0)   
 
         top_frame = Frame(main_frame, bg=self.bg_color)
-        top_frame.grid(row=0, column=0, sticky="ew", pady=(0, 20))
-        top_frame.grid_columnconfigure(0, weight=1)  # empuja el usuario a la derecha
+        top_frame.grid(row=0, column=0, columnspan=2, sticky="ew", pady=(0, 20))  # columnspan 2
+        top_frame.grid_columnconfigure(0, weight=1)
 
         Label(top_frame, text="Biblioteca",
-              font=("Arial", 22, "bold"), bg=self.bg_color).grid(row=0, column=0, sticky="w")
+            font=("Arial", 22, "bold"), bg=self.bg_color).grid(row=0, column=0, sticky="w")
 
-        usuario_texto = f"Usuario: {self.app.usuario_actual}"
+        usuario_texto = f"Usuario: {self.app.usuario_nombre}"
         Label(top_frame, text=usuario_texto, font=("Arial", 11, "bold"),
-              bg=self.bg_color, fg="#333333").grid(row=0, column=1, sticky="e", padx=(20,0))
+            bg=self.bg_color, fg="#333333").grid(row=0, column=1, sticky="e", padx=(20,0))
 
         search_frame = Frame(main_frame, bg=self.bg_color)
-        search_frame.grid(row=1, column=0, sticky="ew", pady=(0, 20))
+        search_frame.grid(row=1, column=0, columnspan=2, sticky="ew", pady=(0, 20))  # columnspan 2
         search_frame.grid_columnconfigure(0, weight=1)
         search_frame.grid_columnconfigure(1, weight=1)
 
@@ -84,7 +87,7 @@ class Main:
         Entry(entry_genero_frame, textvariable=self.var_genero, bd=0, font=("Arial", 11)).pack(side="left", padx=5, pady=5, fill="x", expand=True)
 
         table_frame = Frame(main_frame, bg=self.bg_color, bd=2, relief="groove")
-        table_frame.grid(row=2, column=0, sticky="w", pady=(0, 10))
+        table_frame.grid(row=2, column=0, sticky="nsew", pady=(0, 10))  
 
         Label(
             table_frame,
@@ -94,7 +97,7 @@ class Main:
         ).pack(anchor="w", padx=10, pady=(10, 5))
 
         tree_container = Frame(table_frame, bg=self.bg_color)
-        tree_container.pack(padx=10, pady=(0, 10))
+        tree_container.pack(padx=10, pady=(0, 10), fill="both", expand=True)
 
         self.tabla_libros = ttk.Treeview(
             tree_container,
@@ -117,24 +120,51 @@ class Main:
         self.tabla_libros.column("paginas", width=70, anchor="center")
         self.tabla_libros.column("genero", width=100)
 
-        scrollbar_y = Scrollbar(
-            tree_container,
-            orient="vertical",
-            command=self.tabla_libros.yview
-        )
+        scrollbar_y = Scrollbar(tree_container, orient="vertical", command=self.tabla_libros.yview)
+        self.tabla_libros.configure(yscrollcommand=scrollbar_y.set)
 
-        self.tabla_libros.configure(
-            yscrollcommand=scrollbar_y.set
-        )
-
-        self.tabla_libros.pack(side="left")
+        self.tabla_libros.pack(side="left", fill="both", expand=True)
         scrollbar_y.pack(side="right", fill="y")
 
-        bottom_frame = Frame(main_frame, bg=self.bg_color)
-        bottom_frame.grid(row=3, column=0, sticky="e", pady=(0, 5))
-        Button(bottom_frame, text="Pedir prestado", font=("Arial", 12),
-               bg="#e0e0e0", relief="raised", width=15).pack(side="right")
+        prestamos_frame = Frame(main_frame, bg=self.bg_color, bd=2, relief="groove")
+        prestamos_frame.grid(row=2, column=1, sticky="nsew", padx=(10, 0), pady=(0, 10))
+        prestamos_frame.grid_propagate(False) 
+        prestamos_frame.config(width=300)      
 
+        Label(
+            prestamos_frame,
+            text="Préstamos activos",
+            bg=self.bg_color,
+            font=("Arial", 14, "bold")
+        ).pack(anchor="w", padx=10, pady=(10, 5))
+
+        prestamo_tree_container = Frame(prestamos_frame, bg=self.bg_color)
+        prestamo_tree_container.pack(padx=10, pady=(0, 10), fill="both", expand=True)
+
+        self.tabla_prestamos = ttk.Treeview(
+            prestamo_tree_container,
+            columns=("libro", "fecha"),
+            show="headings",
+            height=6  
+        )
+
+        self.tabla_prestamos.heading("libro", text="Libro")
+        self.tabla_prestamos.heading("fecha", text="Fecha préstamo")
+
+        self.tabla_prestamos.column("libro", width=120)
+        self.tabla_prestamos.column("fecha", width=80)
+
+        scrollbar_prestamos = Scrollbar(prestamo_tree_container, orient="vertical", command=self.tabla_prestamos.yview)
+        self.tabla_prestamos.configure(yscrollcommand=scrollbar_prestamos.set)
+
+        self.tabla_prestamos.pack(side="left", fill="both", expand=True)
+        scrollbar_prestamos.pack(side="right", fill="y")
+
+        bottom_frame = Frame(main_frame, bg=self.bg_color)
+        bottom_frame.grid(row=3, column=0, columnspan=2, sticky="e", pady=(0, 5))  
+        Button(bottom_frame, text="Pedir prestado", font=("Arial", 12),
+            bg="#e0e0e0", relief="raised", width=15, command=self.solicitar_prestamo).pack(side="right")
+        
     def mostrar_libros(self):
         conn = sqlite3.connect("biblioteca.db")
         cursor = conn.cursor()
@@ -142,13 +172,65 @@ class Main:
         for item in self.tabla_libros.get_children():
             self.tabla_libros.delete(item)
 
-        cursor.execute("SELECT titulo, autor, isbn, anio, paginas, genero FROM tabla_libros")
+        cursor.execute("SELECT id_libro, titulo, autor, isbn, anio, paginas, genero FROM tabla_libros")
         filas = cursor.fetchall()
 
         for fila in filas:
-            self.tabla_libros.insert("", "end", values=fila)
+            id_libro = fila[0]        
+            resto_valores = fila[1:]   
+            
+            self.tabla_libros.insert("", "end", iid=id_libro, values=resto_valores)
 
         conn.close()
+
+    def mostrar_prestamos(self):
+        conn = sqlite3.connect("biblioteca.db")
+        cursor = conn.cursor()
+
+        for item in self.tabla_prestamos.get_children():
+            self.tabla_prestamos.delete(item)
+
+        try:
+            id_usuario_actual = self.app.usuario_actual.id_usuario
+        except AttributeError:
+            id_usuario_actual = self.app.usuario_actual 
+
+        query = """
+            SELECT tabla_libros.titulo, tabla_prestamos.fecha_prestamo 
+            FROM tabla_prestamos
+            INNER JOIN tabla_libros ON tabla_prestamos.id_libro = tabla_libros.Id_Libro
+            WHERE tabla_prestamos.id_usuario = ?
+        """
+        
+        cursor.execute(query, (id_usuario_actual,))
+        filas = cursor.fetchall()
+
+        for fila in filas:
+            self.tabla_prestamos.insert("", "end", values=fila)
+
+        conn.close()
+    
+    def solicitar_prestamo(self):
+        seleccion = self.tabla_libros.selection()
+        
+        if not seleccion:
+            showwarning("Atención", "Por favor, seleccione un libro de la lista.")
+            return
+            
+        id_libro = seleccion[0]
+        id_usuario = self.app.usuario_actual
+
+        gestor = Gestor_Prestamo()
+        
+        exito = gestor.agregar_prestamo(usuarioID=id_usuario, LibroID=id_libro)
+        
+        if exito:
+            showinfo("Éxito", "El préstamo ha sido registrado correctamente.")
+            self.mostrar_libros()
+            self.mostrar_prestamos()
+        else:
+            showerror("Error", "No se pudo procesar el préstamo. Verifique el stock disponible.")
+    
 
 
 
@@ -197,19 +279,23 @@ class Login:
     
     def cambiar_a_registro(self):
         self.app.mostrar_registro()
-
     def iniciar_sesion(self):
-        usuario = self.var_usuario.get()
-        contraseña = self.var_contraseña.get()
+        usuario_input = self.var_usuario.get()
+        contraseña_input = self.var_contraseña.get()
 
-        if not usuario or not contraseña:
+        if not usuario_input or not contraseña_input:
             showinfo("Error", "Complete todos los campos")
             return
 
-        if self.app.db.verificar_usuario(usuario, contraseña):
-            self.app.usuario_actual = usuario
-            showinfo("Inicio de sesión exitoso", f"Bienvenido {usuario}")
+        datos_usuario = self.app.db.verificar_usuario(usuario_input, contraseña_input)
+
+        if datos_usuario is not None:
+            id_usuario, usuario,*_ = datos_usuario
             
+            self.app.usuario_actual = id_usuario
+            self.app.usuario_nombre = usuario
+            
+            showinfo("Inicio de sesión exitoso", f"Bienvenido {usuario}")
             self.app.mostrar_main()
         else:
             showinfo("Error", "Usuario o contraseña incorrectos")
@@ -289,21 +375,18 @@ class Registro:
         else:
             showerror("Error de registro", "El usuario, DNI o correo electrónico ya se encuentran registrados.")
             
-            # SOLUCIÓN: Usamos Toplevel para crear una ventana NUEVA e independiente
             ventana_ayuda = Toplevel(self.root) 
             ventana_ayuda.title("Ayuda con la cuenta")
             ventana_ayuda.geometry("300x120")
             ventana_ayuda.resizable(False, False)
             
-            # Hace que la ventana dependa de la principal y bloquee la interacción con el fondo temporalmente
             ventana_ayuda.transient(self.root)
             ventana_ayuda.grab_set()
 
-            # Ahora sí puedes usar pack() libremente porque esta ventana está vacía
             Label(ventana_ayuda, text="¿Tienes problemas para registrarte?", font=("Arial", 10, "bold")).pack(pady=10)
 
             def recuperar_con():
-                ventana_ayuda.destroy() # Esto ahora solo cierra la mini ventana flotante
+                ventana_ayuda.destroy() 
                 showinfo("Recuperación", "Se ha enviado un correo de recuperación al mail ingresado.")
 
             btn_olvido = Button(

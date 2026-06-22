@@ -1,5 +1,6 @@
 import sqlite3
 from  libro import Libro
+from datetime import datetime, timedelta
 
 
 Base_Nombre = "biblioteca.db"
@@ -25,7 +26,7 @@ class BasedeDatos():
 
         con.commit()
         con.close()
-    def VerTablas(self):
+    def Ver_Tablas(self):
         con = sqlite3.connect(Base_Nombre)
         cursor = con.cursor()
 
@@ -117,7 +118,7 @@ class Gestor_usuarios:
         usuario = cursor.fetchone()
         con.close()
         if usuario:
-            return True
+            return usuario
         else:
             return False
 
@@ -150,7 +151,70 @@ class Gestor_Libros:
 
 
 class Gestor_Prestamo:
-    pass
+    def agregar_prestamo(self,usuarioID, LibroID):
+        try:
+            con = sqlite3.connect(Base_Nombre)
+            cursor = con.cursor()
+
+            cursor.execute("SELECT id_usuario FROM tabla_usuarios WHERE id_usuario = ?", (usuarioID,))
+            usuario = cursor.fetchone()
+            if not usuario:
+                print(f"Error: Usuario con ID {usuarioID} no encontrado.")
+                con.close()
+                return False
+
+            cursor.execute(
+                "SELECT id_libro, stock, disponible FROM tabla_libros WHERE id_libro = ?",
+                (LibroID,)
+            )
+            libro = cursor.fetchone()
+            if not libro:
+                print(f"Error: Libro con ID {LibroID} no encontrado.")
+                con.close()
+                return False
+
+            id_libro, stock, disponible = libro
+            if stock <= 0 or not disponible:
+                print(f"Error: El libro ID {LibroID} no tiene stock disponible.")
+                con.close()
+                return False
+
+            fecha_prestamo = datetime.now().date()
+            fecha_devolucion = fecha_prestamo + timedelta(days=15)  
+
+            cursor.execute(
+                """INSERT INTO tabla_prestamos 
+                   (id_usuario, id_libro, fecha_prestamo, fecha_devolucion)
+                   VALUES (?, ?, ?, ?)""",
+                (usuarioID, LibroID, fecha_prestamo, fecha_devolucion)
+            )
+
+            nuevo_stock = stock - 1
+            nueva_disponible = 1 if nuevo_stock > 0 else 0
+            cursor.execute(
+                "UPDATE tabla_libros SET stock = ?, disponible = ? WHERE id_libro = ?",
+                (nuevo_stock, nueva_disponible, LibroID)
+            )
+
+            con.commit()
+            con.close()
+            print(f"Préstamo registrado correctamente. Libro ID {LibroID} -> Usuario ID {usuarioID}")
+            return True
+
+        except sqlite3.Error as e:
+            print(f"Error en la base de datos: {e}")
+            if con:
+                con.rollback()
+                con.close()
+            return False
+        except Exception as e:
+            print(f"Error inesperado: {e}")
+            if con:
+                con.rollback()
+                con.close()
+            return False
+
+
 
 DB = BasedeDatos()
 DB.crear_tabla(

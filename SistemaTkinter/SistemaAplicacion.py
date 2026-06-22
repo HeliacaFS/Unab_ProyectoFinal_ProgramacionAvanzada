@@ -10,6 +10,7 @@ class App:
         self.db = DB.Gestor_usuarios()
 
         self.usuario_actual = None
+        self.usuario_nombre = None
 
     def iniciar_aplicacion(self):
         self.mostrar_login()
