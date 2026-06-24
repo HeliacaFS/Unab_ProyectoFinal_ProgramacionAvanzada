@@ -1,0 +1,97 @@
+nombre,autor,isbn,categoria,disponible
+Python Básico,Guido van Rossum,978000000001,Programación,1
+Cien años de soledad,Gabriel García Márquez,978000000002,Literatura,1
+El Principito,Antoine de Saint-Exupéry,978000000003,Infantil,1
+Don Quijote de la Mancha,Miguel de Cervantes,978000000004,Clásico,1
+La Odisea,Homero,978000000005,Clásico,1
+1984,George Orwell,978000000006,Ciencia Ficción,1
+Fahrenheit 451,Ray Bradbury,978000000007,Ciencia Ficción,1
+Crimen y castigo,Fiódor Dostoyevski,978000000008,Literatura,1
+Orgullo y prejuicio,Jane Austen,978000000009,Romance,1
+Los miserables,Victor Hugo,978000000010,Literatura,1
+Rayuela,Julio Cortázar,978000000011,Literatura,1
+La sombra del viento,Carlos Ruiz Zafón,978000000012,Misterio,1
+El código Da Vinci,Dan Brown,978000000013,Suspenso,1
+Harry Potter y la piedra filosofal,J.K. Rowling,978000000014,Fantasía,1
+El Hobbit,J.R.R. Tolkien,978000000015,Fantasía,1
+El Señor de los Anillos,J.R.R. Tolkien,978000000016,Fantasía,1
+It,Stephen King,978000000017,Terror,1
+Carrie,Stephen King,978000000018,Terror,1
+Misery,Stephen King,978000000019,Terror,1
+El resplandor,Stephen King,978000000020,Terror,1
+Fundación,Isaac Asimov,978000000021,Ciencia Ficción,1
+Yo, robot,Isaac Asimov,978000000022,Ciencia Ficción,1
+Los propios dioses,Isaac Asimov,978000000023,Ciencia Ficción,1
+Breve historia del tiempo,Stephen Hawking,978000000024,Ciencia,1
+Cosmos,Carl Sagan,978000000025,Ciencia,1
+El universo elegante,Brian Greene,978000000026,Ciencia,1
+Sapiens,Yuval Noah Harari,978000000027,Historia,1
+Homo Deus,Yuval Noah Harari,978000000028,Historia,1
+21 lecciones para el siglo XXI,Yuval Noah Harari,978000000029,Historia,1
+La guerra y la paz,León Tolstói,978000000030,Literatura,1
+Anna Karenina,León Tolstói,978000000031,Literatura,1
+Crónica de una muerte anunciada,Gabriel García Márquez,978000000032,Literatura,1
+Pedro Páramo,Juan Rulfo,978000000033,Literatura,1
+La casa de los espíritus,Isabel Allende,978000000034,Literatura,1
+Eva Luna,Isabel Allende,978000000035,Literatura,1
+El amor en los tiempos del cólera,Gabriel García Márquez,978000000036,Literatura,1
+Ensayo sobre la ceguera,José Saramago,978000000037,Literatura,1
+Las intermitencias de la muerte,José Saramago,978000000038,Literatura,1
+El alquimista,Paulo Coelho,978000000039,Filosofía,1
+Brida,Paulo Coelho,978000000040,Filosofía,1
+Veronika decide morir,Paulo Coelho,978000000041,Filosofía,1
+El diario de Ana Frank,Ana Frank,978000000042,Historia,1
+Los juegos del hambre,Suzanne Collins,978000000043,Fantasía,1
+En llamas,Suzanne Collins,978000000044,Fantasía,1
+Sinsajo,Suzanne Collins,978000000045,Fantasía,1
+Crepúsculo,Stephenie Meyer,978000000046,Romance,1
+Luna nueva,Stephenie Meyer,978000000047,Romance,1
+Eclipse,Stephenie Meyer,978000000048,Romance,1
+Amanecer,Stephenie Meyer,978000000049,Romance,1
+El nombre del viento,Patrick Rothfuss,978000000050,Fantasía,1
+El temor de un hombre sabio,Patrick Rothfuss,978000000051,Fantasía,1
+La música del silencio,Patrick Rothfuss,978000000052,Fantasía,1
+Los pilares de la tierra,Ken Follett,978000000053,Historia,1
+Un mundo sin fin,Ken Follett,978000000054,Historia,1
+La caída de los gigantes,Ken Follett,978000000055,Historia,1
+El invierno del mundo,Ken Follett,978000000056,Historia,1
+El umbral de la eternidad,Ken Follett,978000000057,Historia,1
+Inferno,Dan Brown,978000000058,Suspenso,1
+Ángeles y demonios,Dan Brown,978000000059,Suspenso,1
+El símbolo perdido,Dan Brown,978000000060,Suspenso,1
+Digital Fortress,Dan Brown,978000000061,Suspenso,1
+Deception Point,Dan Brown,978000000062,Suspenso,1
+La chica del tren,Paula Hawkins,978000000063,Misterio,1
+Los hombres que no amaban a las mujeres,Stieg Larsson,978000000064,Misterio,1
+La reina en el palacio de las corrientes de aire,Stieg Larsson,978000000065,Misterio,1
+La chica que soñaba con una cerilla y un bidón de gasolina,Stieg Larsson,978000000066,Misterio,1
+El psicoanalista,John Katzenbach,978000000067,Suspenso,1
+La historia interminable,Michael Ende,978000000068,Fantasía,1
+Momo,Michael Ende,978000000069,Fantasía,1
+El perfume,Patrick Süskind,978000000070,Literatura,1
+La metamorfosis,Franz Kafka,978000000071,Literatura,1
+El proceso,Franz Kafka,978000000072,Literatura,1
+El castillo,Franz Kafka,978000000073,Literatura,1
+La insoportable levedad del ser,Milan Kundera,978000000074,Literatura,1
+Tokio Blues,Haruki Murakami,978000000075,Literatura,1
+Kafka en la orilla,Haruki Murakami,978000000076,Literatura,1
+Crónica del pájaro que da cuerda al mundo,Haruki Murakami,978000000077,Literatura,1
+1Q84,Haruki Murakami,978000000078,Literatura,1
+El arte de la guerra,Sun Tzu,978000000079,Filosofía,1
+Meditaciones,Marco Aurelio,978000000080,Filosofía,1
+La república,Platón,978000000081,Filosofía,1
+Ética a Nicómaco,Aristóteles,978000000082,Filosofía,1
+Más allá del bien y del mal,Friedrich Nietzsche,978000000083,Filosofía,1
+Así habló Zaratustra,Friedrich Nietzsche,978000000084,Filosofía,1
+El contrato social,Jean-Jacques Rousseau,978000000085,Filosofía,1
+El príncipe,Nicolás Maquiavelo,978000000086,Filosofía,1
+La Biblia,Desconocido,978000000087,Religión,1
+El Corán,Desconocido,978000000088,Religión,1
+Bhagavad Gita,Desconocido,978000000089,Religión,1
+Tao Te Ching,Lao Tse,978000000090,Filosofía,1
+El poder del ahora,Eckhart Tolle,978000000091,Autoayuda,1
+Los 7 hábitos de la gente altamente efectiva,Stephen Covey,978000000092,Autoayuda,1
+Cómo ganar amigos e influir sobre las personas,Dale Carnegie,978000000093,Autoayuda,1
+Padre rico, padre pobre,Robert Kiyosaki,978000000094,Finanzas,1
+El monje que vendió su Ferrari,Robin Sharma,978000000095,Autoayuda,1
+La magia del orden,Marie Kondo,978000000096,Autoayuda,1
